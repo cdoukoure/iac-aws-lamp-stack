@@ -3,9 +3,20 @@ variable "prefix" {
   type        = string
 }
 
+variable "region" {
+  description = "This is the environment your webapp will be prefixed with. dev, qa, or prod"
+  type        = string
+}
+
 variable "ec2_web_instance_type" {
   type    = string
   default = "t3.micro"
+}
+
+variable "ec2_web_domain_name" {
+  description = "Nom de domaine"
+  type = string
+  default = "example.com"
 }
 
 variable "ec2_web_key_name" {
@@ -21,7 +32,7 @@ variable "ec2_web_min_instance" {
 
 variable "ec2_web_max_instance" {
   type = number
-  default = 4
+  default = 8
 }
 
 variable "web_security_group_id" {

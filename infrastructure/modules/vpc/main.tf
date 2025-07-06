@@ -124,7 +124,7 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-# 6. Security Group pour les EC2 
+# 6. EC2 Security Group 
 resource "aws_security_group" "ec2_web" {
   name        = "${var.prefix}-ec2_web-sg"
   description = "Web Security Group"
@@ -158,7 +158,7 @@ resource "aws_security_group" "ec2_web" {
   }
 }
 
-# RDS Security Group
+# 7. RDS Security Group
 resource "aws_security_group" "rds_mysql" {
   name   = "${var.prefix}-rds-mysql-sg"
   vpc_id = aws_vpc.main.id
@@ -171,38 +171,6 @@ resource "aws_security_group" "rds_mysql" {
   }
 }
 
-# 7. IAM Role avec politique attachée
 
-# WEB & Monitoring CloudWatch
 
-resource "aws_iam_role" "ec2_web" {
-  name = "${var.prefix}-ec2_web-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-    }]
-  })
-}
-
-# Attache une politique IAM standard
-resource "aws_iam_role_policy_attachment" "ssm" {
-  role       = aws_iam_role.ec2_web.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-}
-
-resource "aws_iam_role_policy_attachment" "cloudwatch" {
-  role       = aws_iam_role.ec2_web.name
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-}
-
-resource "aws_iam_instance_profile" "ec2_web" {
-  name = "${var.prefix}-ec2_web-profile"
-  role = aws_iam_role.ec2_web.name
-}
 

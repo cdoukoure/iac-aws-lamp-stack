@@ -1,0 +1,1 @@
+terraform init && terraform plan -out=LAMPStack.plan && terraform apply LAMPStack.plan
